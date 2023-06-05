@@ -75,43 +75,140 @@ void drawIqomah(int DrawAdd)  // Countdown Iqomah (9 menit)
       }    
   }
 
-  void testDraw(int DrawAdd)
+  void testDraw()
   {
-    if(!dwDo(DrawAdd)) return;
+   // if(!dwDo(DrawAdd)) return;
+    static uint8_t    y;
+    static uint8_t    s; // 0=in, 1=out    
+    
      char out1[10];
      char out2[10];
      int Jam = now.hour();
      int Menit = now.minute();
      int Detik = now.second();
-     static uint16_t   x; 
-     static uint16_t count = 1;
-     const char *msg = drawInfo(count);
-     
-if(Detik % 2){ Disp.drawText(11,0,":"); }
-else{  Disp.drawText(11,0," "); }
+     static uint16_t   lsRn1;   
+    uint16_t          Tmr1 = millis();
+  
+    if((Tmr1-lsRn1)>100) 
+      { 
+        if(s==0 and y<17){lsRn1=Tmr1;y++; DoSwap = true;}
+      }
+    if( y ==17) {s=1;}
+
+if(Detik % 2){ Disp.drawText(-6+y,0,":"); }
+else{  Disp.drawText(-6+y,0," "); }
 sprintf(out1,"%02d",Jam);
 sprintf(out2,"%02d",Menit);
-Disp.drawText(0,0,out1);
-Disp.drawText(15,0,out2);
-dwCtr(33,0,DayName(daynow));
+Disp.drawText(-17+y,0,out1);
+Disp.drawText(-2+y,0,out2);
+dwCtr(33,-17+y,DayName(daynow));
 
- if (reset_x !=0) { x=0;reset_x = 0;}      
-    
-    
-    static uint16_t   lsRn;
-    int fullScroll = Disp.textWidth(msg) + DWidth;    
-    uint16_t          Tmr = millis();
-    if((Tmr-lsRn)> 50)
+if(s==1 && RunSel == 0)
+{ 
+        RunSel = 1;
+        s =0 ;
+}
+// DoSwap = true; 
+  }
+
+  void test1(int DrawAdd)
+  {
+    if(!dwDo(DrawAdd)) return;
+     static uint16_t   x; 
+     static uint8_t count = 1;
+     if (reset_x !=0) { x=0;reset_x = 0;}  
+     const char *msg = drawInfo(count);
+     static uint16_t   lsRn;
+     int fullScroll = Disp.textWidth(msg) + DWidth;    
+     uint16_t          Tmr = millis();
+   
+    if((Tmr-lsRn)> 35)
       { lsRn=Tmr;
-        if (x < fullScroll) {++x;}
-        else {  dwDone(DrawAdd); 
-                x = 0; count++; return;}
-if(count > 3){ count=1; }
-   Disp.drawText(DWidth - x, 8, msg);
-DoSwap = true;
+        if (x < fullScroll ) {++x; }//delayMicroseconds(65);}
+        else {x = 0; count++; }
+        if(count > 4){dwDone(DrawAdd); count=1; }
+        Disp.drawText(DWidth - x, 8, msg);
+        DoSwap = true;    
+      }
+  }
+
+  void test2(int DrawAdd)
+  {
+   if(!dwDo(DrawAdd)) return;  
+    static uint8_t    y;
+    static uint8_t    s; // 0=in, 1=out    
+    static uint16_t   x1; 
+    static uint16_t   lsRn;
+    uint16_t          Tmr = millis();
+    uint8_t           c=0;
+    int               DrawWd=DWidth - c;   
+    static uint8_t    sNum;  
+    
+      if((Tmr-lsRn)>10) 
+      {
+        if(s==0 and x1<(DrawWd/2)){x1++;lsRn=Tmr;}
+        if(s==1 and x1>0){x1--;lsRn=Tmr;}
+      }
+      
+    if((Tmr-lsRn)>2000 and x1 ==(DrawWd/2)) {s=1;}
+    if (x1 == 0 and s==1) 
+      { 
+        
+          dwDone(DrawAdd);
+           sNum=0;
+           
+        s=0;
       }
 
-     
+     drawDate();
+     Disp.drawFilledRect(c-1,8,DrawWd/2-x1,15,0);
+    Disp.drawFilledRect(DrawWd/2+x1,8,65,15,0);
+     DoSwap = true;
+    
+  }
+
+  void test3(int DrawAdd)
+  {
+  if(!dwDo(DrawAdd)) return; 
+  
+    static uint8_t    x;
+    static uint8_t    s; // 0=in, 1=out
+    static uint8_t    sNum; 
+    static uint16_t   lsRn;
+    uint16_t          Tmr = millis();
+    uint8_t           c=0;
+    uint8_t    first_sNum = 0; 
+    int               DrawWd=DWidth - c;    
+
+    if((Tmr-lsRn)>10) 
+      {
+        if(s==0 and x<(DrawWd/2)){x++;lsRn=Tmr;}
+        if(s==1 and x>0){x--;lsRn=Tmr;}
+      }
+      
+    if((Tmr-lsRn)>2000 and x ==(DrawWd/2)) {s=1;}
+    if (x == 0 and s==1) 
+      { 
+        if (sNum <7){sNum++;}
+        else 
+          { 
+          dwDone(DrawAdd);
+           sNum=0;
+          } 
+        s=0;
+      }
+
+    if(Prm.SI==0) {first_sNum =1;}
+    else {first_sNum =0;}
+    if(Prm.SI==0 and sNum == 0) {sNum=1;}
+    if(Prm.ST==0 and sNum == 2) {sNum=3;}
+    if(Prm.SU==0 and sNum == 3) {sNum=4;}
+
+ 
+    drawSholat_S(sNum, c);
+    Disp.drawFilledRect(c-1,8,DrawWd/2-x,15,0);
+    Disp.drawFilledRect(DrawWd/2+x,8,65,15,0);
+  
   }
 
 void drawSholat_S(int sNum,int c) // Box Sholah Time   tampilan jadwal sholat
@@ -130,26 +227,30 @@ uint16_t y;
 //    Disp.drawText(19,0,BuffM);  //tampilkan menit
 //  //  fType(3);
 //  //  Disp.drawText(19,y,BuffD);  //tampilkan detik
-    Disp.drawRect(15,y+3,16,y+5,1);
-    Disp.drawRect(15,y+10,16,y+12,1);
-    DoSwap = true; 
+//    Disp.drawRect(15,y+3,16,y+5,1);
+//    Disp.drawRect(15,y+10,16,y+12,1);
+//    DoSwap = true; 
 
 
     ////////////
-    char  BuffTime[10];
-    char  BuffShol[7];
+    char  BuffTime[20];
+    char  BuffShol[20];
+    char out[20];
     float   stime   = sholatT[sNum];
     uint8_t shour   = floor(stime);
     uint8_t sminute = floor((stime-(float)shour)*60);
     uint8_t ssecond = floor((stime-(float)shour-(float)sminute/60)*3600);
     sprintf(BuffTime,"%02d:%02d",shour,sminute);
+    sprintf(out,"%s %s",sholatN(sNum),BuffTime);
+    sprintf(BuffShol,"%s     ",sholatN(sNum));
 //    Serial.println(String() + "shour:" + shour);
 //    Serial.println(String() + "sminute:" + sminute);
    // Disp.drawRect(c+1,2,62,13);
-    fType(1); dwCtr(33,0,sholatN(sNum)); //tulisan waktu sholat
-    fType(1); dwCtr(33,9,BuffTime);   //jadwal sholatnya
+    fType(1); dwCtr(1,8,BuffShol); //tulisan waktu sholat
+    fType(1); Disp.drawText(34,8,BuffTime);   //jadwal sholatnya
     DoSwap = true;          
   }
+  
 bool stateI = false;
 void drawSholat(int DrawAdd)
   {

@@ -84,7 +84,8 @@ int8_t          SholatNow  = -1;
 boolean         jumat      = false;
 boolean         azzan      = false;
 uint8_t         reset_x    = 0;   
-
+ uint8_t           con=1;
+ 
 //Other Variable
 float sholatT[8]  = {0,0,0,0,0,0,0,0};
 uint8_t Iqomah[8] = {0,5,0,0,5,5,3,5};
@@ -94,14 +95,14 @@ char        CH_Prm[155];
 int         DWidth  = Disp.width();
 int         DHeight = Disp.height();
 boolean     DoSwap;
-int         RunSel    = 1; //
+int         RunSel    = 0; //
 int         RunFinish = 0 ;
 //   -7.364057, 112.646222                                                 
 float latitude =  -7.364057;
 float longitude = 112.646222;
 float timezone = +07.00;
 float ketinggian = 50;
-char Hari[7][12] = {"SENIN","SELASA","RABU","KAMIS","JUM'AT","SABTU","MINGGU"};
+char Hari[7][12] = {"MINGGU","SENIN","SELASA","RABU","KAMIS","JUM'AT","SABTU"};
 char *sholatt[] = {"IMSAK","SUBUH","TERBIT","DHUHA","DZUHUR ","ASHAR","MAGRIB","ISYA"};
 //=======================================
 //===SETUP=============================== 
@@ -134,13 +135,15 @@ void loop()
     DoSwap  = false ;
     fType(1);  
     Disp.clear();
-    
+    Serial.println(String() + "RunSel:" + RunSel);
   
     // =========================================
     // List of Display Component Block =========
     // =========================================
-    testDraw(1);
-    
+    if(!azzan){testDraw();}
+    test1(1);
+    test2(2);
+    test3(3);
 //    anim_JG(1);                                                 // addr: 1 show date time
 //    dwMrq(drawMasjidName(),70,2,2);                             // addr: 2 show Masjid Name
 //    dwMrq(drawDayDate()   ,70,1,3);                             // addr: 3 show Hijriah date
@@ -162,18 +165,18 @@ void loop()
     // =========================================
     // Display Control Block ===================
     // =========================================
-    if(RunFinish==1) {RunSel = 1; RunFinish =0;}                      //after anim 1 set anim 2
+    if(RunFinish==1) {RunSel = 2; RunFinish =0;}                      //after anim 1 set anim 2
     if(RunFinish==2) {RunSel = 3; RunFinish =0;}                      //after anim 2 set anim 3
-//  if(RunFinish==3) {RunSel = 3; RunFinish =0;}
+    if(RunFinish==3) {RunSel = 1; RunFinish =0;}
 //    if(RunFinish==3)                                                  //after anim 3 set anim 5 or anim 4 if puasa
 //         {
 //          if (ty_puasa!=0)  {RunSel = 4; RunFinish =0;}
 //          else {RunSel = 5; RunFinish =0;}
 //         }
-    if(RunFinish==3)  {RunSel = 5;  RunFinish =0;}                      //after anim 4 set anim 5
-    if(RunFinish==5)  {RunSel = 6;  RunFinish =0;}                      //after anim 5 set anim 6
-    if(RunFinish==6)  {RunSel = 7;  RunFinish =0;}                      //after anim 6 set anim 7
-    if(RunFinish==7)  {RunSel = 1;  RunFinish =0;}                      //after anim 7 set anim 8
+//    if(RunFinish==3)  {RunSel = 5;  RunFinish =0;}                      //after anim 4 set anim 5
+//    if(RunFinish==5)  {RunSel = 6;  RunFinish =0;}                      //after anim 5 set anim 6
+//    if(RunFinish==6)  {RunSel = 7;  RunFinish =0;}                      //after anim 6 set anim 7
+//    if(RunFinish==7)  {RunSel = 1;  RunFinish =0;}                      //after anim 7 set anim 8
 //    if(RunFinish==8)  {RunSel = 9;  RunFinish =0;}                      //after anim 8 set anim 9
 //    if(RunFinish==9)  {RunSel = 10; RunFinish =0;}                      //after anim 9 set anim 10
 //    if(RunFinish==10) {RunSel = 1;  RunFinish =0;}                      //after anim 10 set anim 1

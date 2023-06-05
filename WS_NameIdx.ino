@@ -131,6 +131,14 @@ char * drawDayDate()
       return out;
   }
 
+void drawDate()
+  {
+      static char  out[150];;
+      sprintf(out,"%02d-%02d-%04d",now.day(),now.month(),now.year());
+      Disp.drawText(2,8,out);
+      DoSwap = true;           
+  }
+
 char *  drawMasjidName()
   {
       static char  bufMN[] = "MUSHOLLA WAQOF DARUSSALAM KEMPRENG RT31/RW04";
@@ -142,15 +150,12 @@ char *  drawInfo(int count)
       static char  out1[] = "LURUSKAN DAN RAPATKAN SHAFF SHOLAT";
       static char  out2[] = "HARAP TENANG";
       static char  out3[] = "HARAP MATIKAN HP";
-      static char  out4[150];
-      char  locBuff[20];
-      int   locLen = (nowH.hM-1)*11;
-      memccpy_P(locBuff,h_month_E+locLen,0,11);
-      sprintf(out4,"%02d-%02d-%04d   %02d %s %dH\0",now.day(),now.month(),now.year(),nowH.hD,locBuff,nowH.hY);
-      if(count == 1){ return out1; }
-      else if(count == 2){ return out2; }
-      else if(count == 3){ return out3; }
-       else if(count == 4){ return out4; }
+      static char  out4[] = "MUSHOLLA NURUL IMAN PERUM GSA BLOK A";
+     
+      if(count == 1){ return out4; }
+      else if(count == 2){ return out3; }
+      else if(count == 3){ return out2; }
+      else if(count == 4){ return out1; }
   }
 
 char * drawCounterBack()
