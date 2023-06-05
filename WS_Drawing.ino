@@ -75,6 +75,45 @@ void drawIqomah(int DrawAdd)  // Countdown Iqomah (9 menit)
       }    
   }
 
+  void testDraw(int DrawAdd)
+  {
+    if(!dwDo(DrawAdd)) return;
+     char out1[10];
+     char out2[10];
+     int Jam = now.hour();
+     int Menit = now.minute();
+     int Detik = now.second();
+     static uint16_t   x; 
+     static uint16_t count = 1;
+     const char *msg = drawInfo(count);
+     
+if(Detik % 2){ Disp.drawText(11,0,":"); }
+else{  Disp.drawText(11,0," "); }
+sprintf(out1,"%02d",Jam);
+sprintf(out2,"%02d",Menit);
+Disp.drawText(0,0,out1);
+Disp.drawText(15,0,out2);
+dwCtr(33,0,DayName(daynow));
+
+ if (reset_x !=0) { x=0;reset_x = 0;}      
+    
+    
+    static uint16_t   lsRn;
+    int fullScroll = Disp.textWidth(msg) + DWidth;    
+    uint16_t          Tmr = millis();
+    if((Tmr-lsRn)> 50)
+      { lsRn=Tmr;
+        if (x < fullScroll) {++x;}
+        else {  dwDone(DrawAdd); 
+                x = 0; count++; return;}
+if(count > 3){ count=1; }
+   Disp.drawText(DWidth - x, 8, msg);
+DoSwap = true;
+      }
+
+     
+  }
+
 void drawSholat_S(int sNum,int c) // Box Sholah Time   tampilan jadwal sholat
   {
 
@@ -552,6 +591,7 @@ void fType(int x)
     else if(x==2) Disp.setFont(Font2);
     else if(x==3) Disp.setFont(Font3);
     else if(x==4) Disp.setFont(Font4);
+    else if(x==5) Disp.setFont(Font5);
   //  else Disp.setFont(Font5);  
   }
 

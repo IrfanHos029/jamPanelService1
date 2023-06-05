@@ -8,7 +8,7 @@
 #include <font/Font4x6.h>
 #include <font/SystemFont5x7.h>
 #include <font/Font3x5.h>
-//#include <font2/Font6x7.h>
+#include <font/SystemFont5x7Gemuk.h>
 
 #include <DS3231.h>
 #include <EEPROM.h>
@@ -23,7 +23,7 @@
 #define Font2 Font3x5
 #define Font1 SystemFont5x7
 #define Font4 KecNumber
-//#define Font5 Font6x7
+#define Font5 SystemFont5x7Gemuk
     
 // Object Declarations
 DMD3 Disp(2,1);
@@ -135,27 +135,20 @@ void loop()
     fType(1);  
     Disp.clear();
     
-   // Serial.println(String() + "sholatNow:" + SholatNow);
-    // Timer Function every 10 Minutes
-    // Up All function with Timer in this fuction
-  //  Timer_Minute(1);
-
+  
     // =========================================
     // List of Display Component Block =========
     // =========================================
-    anim_JG(1);                                                 // addr: 1 show date time
-    dwMrq(drawMasjidName(),70,2,2);                             // addr: 2 show Masjid Name
-    dwMrq(drawDayDate()   ,70,1,3);                             // addr: 3 show Hijriah date
-   // dwMrq(msgPuasa(hd_puasa,ty_puasa),75,0,4);                  // addr: 5 show Remander Puasa
-    drawSholat(5);                                              // addr: 5 show sholat time
-    dwMrq(drawInfo()    ,70,1,6);                             // addr: 6 show Info 1
-     dwMrq(drawCounterBack(),60,3,7);
-    // anim_DT(7);                                                 // addr: 7 show date time    
-    //dwMrq(drawInfo(280)   ,75,2,8);                             // addr: 8 show Info 2
-  //  drawSholat(9);                                              // addr: 9 show sholat time
-//    dwMrq(drawInfo(430)   ,75,1,10);                            // addr: 10 show Info 3
-  
- Serial.println(String() + "time:" + floatnow);
+    testDraw(1);
+    
+//    anim_JG(1);                                                 // addr: 1 show date time
+//    dwMrq(drawMasjidName(),70,2,2);                             // addr: 2 show Masjid Name
+//    dwMrq(drawDayDate()   ,70,1,3);                             // addr: 3 show Hijriah date
+//  
+//    drawSholat(5);                                              // addr: 5 show sholat time
+//    dwMrq(drawInfo()    ,70,1,6);                             // addr: 6 show Info 1
+//    dwMrq(drawCounterBack(),60,3,7);
+//   
     drawAzzan(100);                                             // addr: 100 show Azzan
     drawIqomah(101);                                            // addr: 101 show Iqomah
 //    dwMrq(drawInfo(580),50,0,102); //Message Sholat biasa       // addr: 202 show Message Sholah
@@ -169,7 +162,7 @@ void loop()
     // =========================================
     // Display Control Block ===================
     // =========================================
-    if(RunFinish==1) {RunSel = 2; RunFinish =0;}                      //after anim 1 set anim 2
+    if(RunFinish==1) {RunSel = 1; RunFinish =0;}                      //after anim 1 set anim 2
     if(RunFinish==2) {RunSel = 3; RunFinish =0;}                      //after anim 2 set anim 3
 //  if(RunFinish==3) {RunSel = 3; RunFinish =0;}
 //    if(RunFinish==3)                                                  //after anim 3 set anim 5 or anim 4 if puasa

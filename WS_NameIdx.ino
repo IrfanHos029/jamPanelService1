@@ -126,7 +126,7 @@ char * drawDayDate()
       static char  out[150];
       int   locLen = (nowH.hM-1)*11;
       memccpy_P(locBuff,h_month_E+locLen,0,11);
-      sprintf(out,"%s %s,%02d-%02d-%04d   %02d %s %dH\0",DayName(daynow),pasar[jumlahhari()%5],now.day(),now.month(),now.year(),nowH.hD,locBuff,nowH.hY);
+      sprintf(out,"%s,%02d-%02d-%04d   %02d %s %dH\0",DayName(daynow),now.day(),now.month(),now.year(),nowH.hD,locBuff,nowH.hY);
       //Serial.println(daynow+1);
       return out;
   }
@@ -134,20 +134,23 @@ char * drawDayDate()
 char *  drawMasjidName()
   {
       static char  bufMN[] = "MUSHOLLA WAQOF DARUSSALAM KEMPRENG RT31/RW04";
-//      static char  out[85];
-//      char  locBuff[10];
-//      int   locLen = (Prm.MT-1)*10;
-//      memccpy_P(locBuff,MT_Name_E+locLen  ,0,10);
-//      //EEPROM.get(55,bufMN);
-//      sprintf(out,"%s %s\0",locBuff,bufMN);
       return bufMN;
   }
  
-char *  drawInfo()
+char *  drawInfo(int count)
   {
-      static char  out[150] = "Luruskan dan Rapatkan Shaff Sholat";
-      //EEPROM.get(addr,out);
-      return out;
+      static char  out1[] = "LURUSKAN DAN RAPATKAN SHAFF SHOLAT";
+      static char  out2[] = "HARAP TENANG";
+      static char  out3[] = "HARAP MATIKAN HP";
+      static char  out4[150];
+      char  locBuff[20];
+      int   locLen = (nowH.hM-1)*11;
+      memccpy_P(locBuff,h_month_E+locLen,0,11);
+      sprintf(out4,"%02d-%02d-%04d   %02d %s %dH\0",now.day(),now.month(),now.year(),nowH.hD,locBuff,nowH.hY);
+      if(count == 1){ return out1; }
+      else if(count == 2){ return out2; }
+      else if(count == 3){ return out3; }
+       else if(count == 4){ return out4; }
   }
 
 char * drawCounterBack()
