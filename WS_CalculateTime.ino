@@ -81,11 +81,12 @@ float HourAngle( float Alfa, float Declination, float Latitude)
 
 void Pray_Time(float TimeZone, float Latitude, float Longitude,float Altitude,float Declination, float EquationOfTime )
   { 
-      Prm.IH = 2;
+      Prm.IH = 1;
      Prm.II = 1;
-     Prm.IS = 2;
+     Prm.IS = 1;
      Prm.IA = 1;
-     Prm.IL = 2;
+     Prm.IL = 1;
+     Prm.IM = 1;
     // Dzuhur
     float BaseTime = fix_hour((float)12+TimeZone-(Longitude/15)-EquationOfTime);
     sholatT[4] = BaseTime + (float)Prm.IH/60 + (float)Prm.IL/60;
@@ -113,7 +114,7 @@ void Pray_Time(float TimeZone, float Latitude, float Longitude,float Altitude,fl
     // Imsak
     sholatT[0] = sholatT[1]-(float)10/60;  
     // Dhuha
-    HA = HourAngle((float)-5.2,Declination,Latitude);
+    HA = HourAngle((float)-5.3,Declination,Latitude); //5.3
     sholatT[3] = BaseTime - HA;
   char buff[100];
   }
